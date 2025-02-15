@@ -1,11 +1,13 @@
 import * as THREE from 'three';
-import { OrbitControls } from './jsm/controls/OrbitControls.js';
-import { OBJLoader } from './jsm/loaders/OBJLoader.js';
-import Stats from './jsm/libs/stats.module.js';
-import { GUI } from './jsm/libs/lil-gui.module.min.js';
+import { OrbitControls } from '../jsm/controls/OrbitControls.js';
+import { OBJLoader } from '../jsm/loaders/OBJLoader.js';
+import Stats from '../jsm/libs/stats.module.js';
+import { GUI } from '../jsm/libs/lil-gui.module.min.js';
+import { HomeScreen } from './homeScreen.js';
 
 // Scene
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xaaaaaa); // light gray background
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
@@ -17,6 +19,7 @@ const renderer = new THREE.WebGLRenderer({
     powerPreference: "high-performance", // Use best available GPU settings
     logarithmicDepthBuffer: true // Helps with depth precision
 });
+
 renderer.setPixelRatio(window.devicePixelRatio); // Improve clarity
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true; // Enable real-time shadows
@@ -26,6 +29,18 @@ document.body.appendChild(renderer.domElement);
 // Orbit Controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
+
+// Disable controls initially
+controls.enabled = false;
+
+// Event Listener for joining museum
+window.addEventListener('joinMuseum', () => {
+    // Enable controls after joining
+    controls.enabled = true;
+});
+
+// Home Screen UI
+const homeScreen = new HomeScreen(scene, camera, renderer);
 
 // Lighting - More realistic & soft shadows
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
@@ -82,6 +97,7 @@ objLoader.load(
         museum.scale.set(1, 1, 1);
         museum.position.set(0, 0, 0);
         scene.add(museum);
+        animate();
     },
     (xhr) => console.log(`Museum OBJ: ${((xhr.loaded / xhr.total) * 100).toFixed(2)}% loaded`),
     (error) => console.error('Error loading museum model:', error)
@@ -108,7 +124,9 @@ cameraFolder.open();
 // Animation Loop
 function animate() {
     requestAnimationFrame(animate);
-    controls.update();
+    if (!homeScreen.isActive) {
+        controls.update();
+    }
     render();
     stats.update();
 }
