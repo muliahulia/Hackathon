@@ -86,7 +86,7 @@ controls.addEventListener('unlock', () => {
 });
 
 // Lighting Setup
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+const ambientLight = new THREE.AmbientLight(0xefc576, 0.7);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
