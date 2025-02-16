@@ -52,7 +52,7 @@ const homeScreen = new HomeScreen(scene, camera, renderer);
 // PointerLockControls for first-person camera movement
 const controls = new PointerLockControls(camera, document.body);
 document.addEventListener('click', () => {
-    if(!homeScreen.isActive) {
+    if(!homeScreen.isActive && !controls.isLocked) {
         controls.lock();
     }
 })
@@ -61,12 +61,6 @@ controls.enableDamping = true;
 
 // Disable controls initially
 controls.enabled = false;
-
-// Event Listener for joining museum
-window.addEventListener('joinMuseum', () => {
-    // Enable controls after joining
-    controls.enabled = true;
-});
 
 // Lighting setup
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
