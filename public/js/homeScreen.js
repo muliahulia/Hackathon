@@ -109,56 +109,14 @@ export class HomeScreen {
     
             // "Generate Image with AI" button
             const aiBtn = this.createButton('Generate Image with AI');
-
-aiBtn.addEventListener('click', async () => {
-    try {
-        const userPrompt = getUserPrompt(); // Ensure you get the user prompt from the appropriate input
-        const imageUrl = await generateAIImage(userPrompt);
-        
-        if (imageUrl) {
-            displayGeneratedImage(imageUrl); // You can define how the image is displayed
-        } else {
-            console.error("No image generated.");
-        }
-    } catch (error) {
-        console.error('Error generating AI image:', error);
-    }
-});
-
-// Assuming generateAIImage is defined in this file or imported
-async function generateAIImage(prompt) {
-    try {
-        const response = await fetch("http://localhost:3000/generate-image", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ prompt }),  
-        });
-
-        if (!response.ok) throw new Error("Failed to generate image");
-
-        const data = await response.json();
-        return data.imageUrl; // Returns the URL of the generated image
-    } catch (error) {
-        console.error("Error generating image:", error);
-        return null;
-    }
-}
-
-// This function can be used to display the generated image (you can customize it)
-function displayGeneratedImage(imageUrl) {
-    const imgElement = document.getElementById("generated-image");
-    imgElement.src = imageUrl;
-    imgElement.style.display = "block"; // Ensure it's visible
-}
-
-// Assuming getUserPrompt is a function that retrieves the input value (like from a text field)
-function getUserPrompt() {
-    const inputField = document.getElementById("chatbot-input");
-    return inputField.value.trim();
-}
-
+            aiBtn.addEventListener('click', async () => {
+                try {
+                    await generateAIImage();
+                } catch (error) {
+                    console.error('Error generating AI image:', error);
+                }
+            });
+    
             // "Back" button to return to main menu
             const backBtn = this.createButton('Back');
             backBtn.addEventListener('click', () => {
