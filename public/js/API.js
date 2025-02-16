@@ -9,16 +9,14 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// Enable CORS with specific origin (adjust as necessary)
-app.use(cors({ origin: 'http://yourfrontenddomain.com' }));
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+//const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 // Endpoint for Chat Completion using GPT-4
 app.post("/chat", async (req, res) => {
     try {
         const response = await axios.post(
-            "https://api.openai.com/v1/chat/completions",
+            //"https://api.openai.com/v1/chat/completions",
             {
                 model: "gpt-4",  // You can change the model if you prefer a different one
                 messages: [{ role: "user", content: req.body.prompt }],
@@ -38,7 +36,7 @@ app.post("/chat", async (req, res) => {
 app.post("/generate-image", async (req, res) => {
     try {
         const response = await axios.post(
-            "https://api.openai.com/v1/images/generations",
+            //"https://api.openai.com/v1/images/generations",
             {
                 model: "dall-e-3",  // Ensure this matches with the correct model
                 prompt: req.body.prompt,
