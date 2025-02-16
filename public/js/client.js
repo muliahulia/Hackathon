@@ -9,11 +9,32 @@ import { HomeScreen } from './homeScreen.js';
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xaaaaaa); // light gray background
 
-// Camera
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.set(0, 1.8, 5); // Adjusted for first-person height
 
-// Renderer with **higher precision**
+// Add an audio listener for the camera
+const listener = new THREE.AudioListener();
+camera.add(listener);
+
+// Background audio setup (plays continuously)
+const backaudio = new THREE.AudioLoader();
+const backgroundSound = new THREE.Audio(listener);
+backaudio.load('Music/background.mp3', (buffer) => {
+    backgroundSound.setBuffer(buffer);
+    backgroundSound.setLoop(true);
+    backgroundSound.setVolume(0.1);
+    backgroundSound.play();  // Starts playing immediately after loading
+});
+
+// Load the footstep sound
+const audioLoader = new THREE.AudioLoader();
+const footstepSound = new THREE.Audio(listener);
+audioLoader.load('Music/foot.mp3', (buffer) => {
+    footstepSound.setBuffer(buffer);
+    footstepSound.setVolume(0.5); 
+});
+
+// Renderer setup
 const renderer = new THREE.WebGLRenderer({ 
     antialias: true,
     powerPreference: "high-performance", // Use best available GPU settings
@@ -32,7 +53,7 @@ document.addEventListener('click', () => controls.lock());
 // Home Screen UI
 const homeScreen = new HomeScreen(scene, camera, renderer);
 
-// Lighting - More realistic & soft shadows
+// Lighting setup
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
 scene.add(ambientLight);
 
@@ -41,7 +62,7 @@ directionalLight.position.set(5, 10, 5);
 directionalLight.castShadow = true; // Enable shadows
 scene.add(directionalLight);
 
-// Texture Loader with **anisotropy & filtering**
+// Texture Loader and PBR materials
 const textureLoader = new THREE.TextureLoader();
 function loadTexture(url) {
     const texture = textureLoader.load(url);
@@ -51,7 +72,6 @@ function loadTexture(url) {
     return texture;
 }
 
-// Load **High-Quality PBR Textures**
 const baseColorMap = loadTexture('/textures/Art room01_Art_Room1_BaseColor.png');
 const roughnessMap = loadTexture('/textures/Art room01_Art_Room1_Roughness.png');
 const emissiveMap = loadTexture('/textures/Art room01_Art_Room1_Emissive.png');
@@ -59,7 +79,6 @@ const metallicMap = loadTexture('/textures/Art room01_Art_Room1_Metallic.png');
 const heightMap = loadTexture('/textures/Art room01_Art_Room1_Height.png');
 const normalMap = loadTexture('/textures/Art room01_Art_Room1_Normal.png');
 
-// Improved PBR Material
 const museumMaterial = new THREE.MeshStandardMaterial({
     map: baseColorMap,
     roughnessMap: roughnessMap,
@@ -72,7 +91,7 @@ const museumMaterial = new THREE.MeshStandardMaterial({
     emissive: new THREE.Color(0xffffff),
 });
 
-// Load Museum Model with **Smooth Rendering**
+// Load Museum Model
 const objLoader = new OBJLoader();
 objLoader.load(
     './models/museum.obj',
@@ -96,6 +115,7 @@ objLoader.load(
 const playerSpeed = 4;
 const move = { forward: 0, right: 0 };
 let prevTime = performance.now();
+let isMoving = false; // Track movement status
 
 // Movement Listeners
 document.addEventListener('keydown', (event) => {
@@ -146,6 +166,18 @@ function animate() {
     const deltaTime = (time - prevTime) / 1000;
     prevTime = time;
 
+    if (move.forward !== 0 || move.right !== 0) {
+        if (!isMoving) {
+            footstepSound.play(); // Play footstep sound when the player starts moving
+            isMoving = true;
+        }
+    } else {
+        if (isMoving) {
+            footstepSound.stop(); // Stop footstep sound when the player stops
+            isMoving = false;
+        }
+    }
+
     // Move player in the direction they're facing
     const direction = new THREE.Vector3();
     camera.getWorldDirection(direction);
@@ -163,9 +195,9 @@ function animate() {
 
 // HomeScreen Event Handling
 window.addEventListener('joinMuseum', () => {
-    // Lock pointer and hide home screen
     controls.lock();
     homeScreen.hide();
 });
 
+// Start the animation loop
 animate();
