@@ -21,7 +21,13 @@ backaudio.load('Music/background.mp3', (buffer) => {
     backgroundSound.setBuffer(buffer);
     backgroundSound.setLoop(true);
     backgroundSound.setVolume(0.1);
-    backgroundSound.play();
+    document.addEventListener('click', () => {
+        if (backgroundSound.isPlaying) {
+            backgroundSound.pause();
+        } else {
+            backgroundSound.play();
+        }
+    });
 });
 
 const audioLoader = new THREE.AudioLoader();
@@ -29,6 +35,18 @@ const footstepSound = new THREE.Audio(listener);
 audioLoader.load('Music/foot.mp3', (buffer) => {
     footstepSound.setBuffer(buffer);
     footstepSound.setVolume(0.5);
+    document.addEventListener('keydown', (event) => {
+        if (['KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(event.code)) {
+            if (!footstepSound.isPlaying) {
+                footstepSound.play();
+            }
+        }
+    });
+    document.addEventListener('keyup', (event) => {
+        if (['KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(event.code)) {
+            footstepSound.stop();
+        }
+    });
 });
 
 const renderer = new THREE.WebGLRenderer({ 
