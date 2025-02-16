@@ -76,9 +76,55 @@ export class HomeScreen {
         // close homescreen 
         joinButton.addEventListener('click', () => {
             this.hide();
+            window.dispatchEvent(new Event('joinMuseum')); // Fire event to enable movement
         });
 
+        
         const addArtButton = this.createButton('Add Art');
+
+        addArtButton.addEventListener('click', () => {
+            // Hide the primary button container
+            buttonContainer.style.display = 'none';
+            title.style.display = 'none';
+    
+            // Create a new art-container
+            const artContainer = document.createElement('div');
+            Object.assign(artContainer.style, {
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '15px',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                padding: '2rem',
+                zIndex: '1001'
+            });
+    
+            // "Upload Picture" button
+            const uploadBtn = this.createButton('Upload Picture');
+    
+            // "Generate Image with AI" button
+            const aiBtn = this.createButton('Generate Image with AI');
+    
+            // "Back" button to return to main menu
+            const backBtn = this.createButton('Back');
+            backBtn.addEventListener('click', () => {
+                // Remove art container, bring back main menu
+                document.body.removeChild(artContainer);
+                buttonContainer.style.display = 'flex';
+                title.style.display = 'block';
+            });
+    
+            artContainer.appendChild(uploadBtn);
+            artContainer.appendChild(aiBtn);
+            artContainer.appendChild(backBtn);
+            document.body.appendChild(artContainer);
+        });
        
   
         buttonContainer.appendChild(joinButton);
@@ -115,21 +161,25 @@ export class HomeScreen {
   
         return button;
     }
+    
   
     show() {
-        this.container.style.display = 'flex';
+        this.isActive = true;
+        this.container.style.opacity = '1';
+        this.renderer.domElement.style.filter = 'blur(8px)';
+        this.renderer.domElement.style.transform = 'scale(1.1)';
+        document.body.appendChild(this.container);
     }
   
     hide() {
-        this.isActive = true;
-          this.container.style.opacity = '0';
-          // Remove blur from renderer
-          this.renderer.domElement.style.filter = 'none';
-          this.renderer.domElement.style.transform = 'none';
-          
-          // Remove container after fade animation
-          setTimeout(() => {
-              this.container.remove();
-          }, 500);
+        this.isActive = false;  
+        this.container.style.opacity = '0';
+        this.renderer.domElement.style.filter = 'none';
+        this.renderer.domElement.style.transform = 'none';
+    
+        setTimeout(() => {
+            this.container.remove();
+        }, 500);
     }
-  }
+}
+    
