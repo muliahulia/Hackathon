@@ -46,9 +46,16 @@ renderer.shadowMap.enabled = true; // Enable real-time shadows
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Higher quality shadows
 document.body.appendChild(renderer.domElement);
 
+// Home Screen UI
+const homeScreen = new HomeScreen(scene, camera, renderer);
+
 // PointerLockControls for first-person camera movement
 const controls = new PointerLockControls(camera, document.body);
-document.addEventListener('click', () => controls.lock());
+document.addEventListener('click', () => {
+    if(!homeScreen.isActive) {
+        controls.lock();
+    }
+})
 
 controls.enableDamping = true;
 
@@ -60,9 +67,6 @@ window.addEventListener('joinMuseum', () => {
     // Enable controls after joining
     controls.enabled = true;
 });
-
-// Home Screen UI
-const homeScreen = new HomeScreen(scene, camera, renderer);
 
 // Lighting setup
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
@@ -179,45 +183,57 @@ function animate() {
     requestAnimationFrame(animate);
 
     // Only update controls if the home screen is not active
-    if (!homeScreen.isActive) {
+    if (!homeScreen.isActive && controls.enabled) {
         controls.update();
-    }
 
-    const time = performance.now();
-    const deltaTime = (time - prevTime) / 1000;
-    prevTime = time;
+        const time = performance.now();
+        const deltaTime = (time - prevTime) / 1000;
+        prevTime = time;
 
-    if (move.forward !== 0 || move.right !== 0) {
-        while (!isMoving) {
-            footstepSound.play(); // Play footstep sound when the player starts moving
-            isMoving = true;
+        if (move.forward !== 0 || move.right !== 0) {
+            if (!isMoving) {
+                footstepSound.play(); // Play footstep sound when the player starts moving
+                isMoving = true;
+            }
+        } else {
+            if (isMoving) {
+                footstepSound.stop(); // Stop footstep sound when the player stops
+                isMoving = false;
+            }
         }
-    } else {
-        while (isMoving) {
-            footstepSound.stop(); // Stop footstep sound when the player stops
-            isMoving = false;
-        }
+
+        // Move player in the direction they're facing
+        const direction = new THREE.Vector3();
+        camera.getWorldDirection(direction);
+        direction.y = 0; // Keep movement along the horizontal plane
+        direction.normalize();
+
+        const right = new THREE.Vector3();
+        right.crossVectors(camera.up, direction).normalize();
+
+        camera.position.addScaledVector(direction, move.forward * playerSpeed * deltaTime);
+        camera.position.addScaledVector(right, move.right * playerSpeed * deltaTime);
+        
+        renderer.render(scene, camera);
+        stats.update();
+    } 
+    else {
+        renderer.render(scene, camera);
+        stats.update();
     }
-
-    // Move player in the direction they're facing
-    const direction = new THREE.Vector3();
-    camera.getWorldDirection(direction);
-    direction.y = 0; // Keep movement along the horizontal plane
-
-    const right = new THREE.Vector3();
-    right.crossVectors(camera.up, direction).normalize();
-
-    camera.position.addScaledVector(direction, move.forward * playerSpeed * deltaTime);
-    camera.position.addScaledVector(right, move.right * playerSpeed * deltaTime);
-
-    renderer.render(scene, camera);
-    stats.update();
 }
-
 // HomeScreen Event Handling
 window.addEventListener('joinMuseum', () => {
-    controls.lock();
     homeScreen.hide();
+    controls.enabled = true;
+    controls.lock();
+});
+
+controls.addEventListener('unlock', () => {
+    if (!homeScreen.isActive) {
+        controls.enabled = false;
+        homeScreen.show();
+    }
 });
 
 // Start the animation loop
