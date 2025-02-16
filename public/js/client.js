@@ -1,89 +1,35 @@
 import * as THREE from 'three';
 import { PointerLockControls } from '../jsm/controls/PointerLockControls.js';
 import { OBJLoader } from '../jsm/loaders/OBJLoader.js';
+import { GLTFLoader } from '../jsm/loaders/GLTFLoader.js';
 import Stats from '../jsm/libs/stats.module.js';
 import { GUI } from '../jsm/libs/lil-gui.module.min.js';
 import { HomeScreen } from './homeScreen.js';
 
-// Scene setup
+
+
+// Scene Setup
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xaaaaaa);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.set(0, 1.8, 5);
-
 const listener = new THREE.AudioListener();
 camera.add(listener);
 
-// Background Music setup
-const backaudio = new THREE.AudioLoader();
-const backgroundSound = new THREE.Audio(listener);
-backaudio.load('Music/background.mp3', (buffer) => {
-    backgroundSound.setBuffer(buffer);
-    backgroundSound.setLoop(true);
-    backgroundSound.setVolume(0.1);
-    document.addEventListener('click', () => {
-        if (backgroundSound.isPlaying) {
-            backgroundSound.pause();
-        } else {
-            backgroundSound.play();
-        }
-    });
-});
-
-// Footstep Sound setup
-const audioLoader = new THREE.AudioLoader();
-const footstepSound = new THREE.Audio(listener);
-audioLoader.load('Music/foot.mp3', (buffer) => {
-    footstepSound.setBuffer(buffer);
-    footstepSound.setVolume(0.5);
-    document.addEventListener('keydown', (event) => {
-        if (['KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(event.code)) {
-            if (!footstepSound.isPlaying) {
-                footstepSound.play();
-            }
-        }
-    });
-    document.addEventListener('keyup', (event) => {
-        if (['KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(event.code)) {
-            footstepSound.stop();
-        }
-    });
-});
-
-// Renderer setup
+// Renderer Setup
 const renderer = new THREE.WebGLRenderer({ 
     antialias: true,
     powerPreference: "high-performance",
     logarithmicDepthBuffer: true
 });
-renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
-// HomeScreen Initialization
-const homeScreen = new HomeScreen(scene, camera, renderer);
-
-// Pointer Lock Controls
+// FPS Controls
 const controls = new PointerLockControls(camera, document.body);
-document.addEventListener('click', () => {
-    if (!homeScreen.isActive) {
-        controls.lock();
-    }
-});
-
-controls.addEventListener('lock', () => {
-    console.log("Controls locked! Movement enabled.");
-    controls.enabled = true;
-});
-
-controls.addEventListener('unlock', () => {
-    console.log("Controls unlocked! Movement disabled.");
-    controls.enabled = false;
-    homeScreen.show();
-});
+document.addEventListener('click', () => controls.lock());
 
 // Lighting Setup
 const ambientLight = new THREE.AmbientLight(0xefc576, 0.7);
@@ -94,7 +40,7 @@ directionalLight.position.set(5, 10, 5);
 directionalLight.castShadow = true;
 scene.add(directionalLight);
 
-// Texture Loading
+// Texture Loader
 const textureLoader = new THREE.TextureLoader();
 function loadTexture(url) {
     const texture = textureLoader.load(url);
@@ -117,46 +63,34 @@ const museumMaterial = new THREE.MeshStandardMaterial({
     emissive: new THREE.Color(0xffffff),
 });
 
-const objLoader = new OBJLoader();
-objLoader.load(
-    './models/museum.obj',
-    (museum) => {
-        museum.traverse((child) => {
-            if (child.isMesh) {
-                child.material = museumMaterial;
-                child.castShadow = true;
-                child.receiveShadow = true;
-            }
-        });
-        museum.scale.set(1, 1, 1);
-        museum.position.set(0, 0, 0);
-        scene.add(museum);
-        animate();
-    }
-);
+const gltfLoader = new GLTFLoader();
+gltfLoader.load('./models/final.glb', (gltf) => {
+    const museum = gltf.scene;
+    museum.traverse((child) => {
+        if (child.isMesh) {
+            child.material = museumMaterial;
+            child.castShadow = true;
+            child.receiveShadow = true;
+        }
+    });
+    scene.add(museum);
+}, undefined, (error) => console.error('Error loading GLTF model:', error));
 
 // Player Movement
 const playerSpeed = 4;
 const move = { forward: 0, right: 0 };
 let prevTime = performance.now();
-let isMoving = false;
 
 document.addEventListener('keydown', (event) => {
-    switch (event.code) {
-        case 'KeyW': move.forward = 1; break;
-        case 'KeyS': move.forward = -1; break;
-        case 'KeyA': move.right = 1; break;
-        case 'KeyD': move.right = -1; break;
-    }
+    if (event.code === 'KeyW') move.forward = 1;
+    if (event.code === 'KeyS') move.forward = -1;
+    if (event.code === 'KeyA') move.right = 1;
+    if (event.code === 'KeyD') move.right = -1;
 });
 
 document.addEventListener('keyup', (event) => {
-    switch (event.code) {
-        case 'KeyW': 
-        case 'KeyS': move.forward = 0; break;
-        case 'KeyA': 
-        case 'KeyD': move.right = 0; break;
-    }
+    if (['KeyW', 'KeyS'].includes(event.code)) move.forward = 0;
+    if (['KeyA', 'KeyD'].includes(event.code)) move.right = 0;
 });
 
 // Window Resize
@@ -166,69 +100,25 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// Chatbot Integration
-document.getElementById("close-chat").addEventListener("click", () => {
-    document.getElementById("chatbot-container").style.display = "none";
-});
-
-document.getElementById("chatbot-send").addEventListener("click", async () => {
-    const inputField = document.getElementById("chatbot-input");
-    const userPrompt = inputField.value.trim();
-    
-    if (userPrompt) {
-        appendMessage("user", userPrompt);
-        inputField.value = ""; 
-
-        // Get AI-generated image
-        const imageUrl = await generateAIImage(userPrompt);
-        
-        if (imageUrl) {
-            const imgElement = document.getElementById("generated-image");
-            imgElement.src = imageUrl;
-            imgElement.style.display = "block";
-            appendMessage("ai", "Here is your generated image:");
-        } else {
-            appendMessage("ai", "Failed to generate image.");
-        }
-    }
-});
-
-export async function generateAIImage(prompt) {
-    try {
-        const response = await fetch("http://localhost:3000/generate-image", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ prompt }),  
-        });
-
-        if (!response.ok) throw new Error("Failed to generate image");
-
-        const data = await response.json();
-        return data.imageUrl;
-    } catch (error) {
-        console.error("Error generating image:", error);
-        return null;
-    }
-}
-
+// Stats Monitor
 const stats = Stats();
 document.body.appendChild(stats.dom);
 
+// GUI
 const gui = new GUI();
 const cameraFolder = gui.addFolder('Camera');
 cameraFolder.add(camera.position, 'z', 0, 10);
 cameraFolder.open();
 
+// Animation Loop
 function animate() {
     requestAnimationFrame(animate);
 
-    if (!homeScreen.isActive && controls.isLocked) {
-        const time = performance.now();
-        const deltaTime = (time - prevTime) / 1000;
-        prevTime = time;
+    const time = performance.now();
+    const deltaTime = (time - prevTime) / 1000;
+    prevTime = time;
 
+    if (controls.isLocked) {
         const direction = new THREE.Vector3();
         camera.getWorldDirection(direction);
         direction.y = 0;
@@ -244,5 +134,4 @@ function animate() {
     renderer.render(scene, camera);
     stats.update();
 }
-
 animate();

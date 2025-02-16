@@ -1,4 +1,4 @@
-import { generateAIImage } from './client.js'; 
+// import { generateAIImage } from './client.js'; 
 
 export class HomeScreen {
     constructor(scene, camera, renderer) {
@@ -111,7 +111,7 @@ export class HomeScreen {
             const aiBtn = this.createButton('Generate Image with AI');
             aiBtn.addEventListener('click', async () => {
                 try {
-                    await generateAIImage();
+                    // await generateAIImage();
                 } catch (error) {
                     console.error('Error generating AI image:', error);
                 }
