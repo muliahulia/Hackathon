@@ -1,0 +1,374 @@
+# Blender 4.3.2 MTL File: 'None'
+# www.blender.org
+
+newmtl Art_Room1
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+
+newmtl Banner_Unreal_Engine_5_5_Now_Available
+Ns 0.000000
+Ka 0.267241 0.267241 0.267241
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/Banner_Unreal_Engine_5.5_Now_Available.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/Banner_Unreal_Engine_5.5_Now_Available.jpg
+
+newmtl Creative_Social_Media_Vector_Web_Banner_Graphics_19813012_1_1_5
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl Creative_Social_Media_Vector_Web_Banner_Graphics_19813073_1
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/Creative-Social-Media-Vector-Web-Banner-Graphics-19813073-1.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/Creative-Social-Media-Vector-Web-Banner-Graphics-19813073-1.jpg
+
+newmtl Material.001
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3
+
+newmtl Material_001
+Ns 0.000000
+Ka 0.301724 0.301724 0.301724
+Kd 0.250879 0.221124 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3
+
+newmtl Material_002
+Ns 616.766602
+Ka 0.931035 0.931035 0.931035
+Kd 0.059429 0.133897 0.643180
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 3
+
+newmtl Material_003
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.191346 0.001872 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl Material_005
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl Material_006
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material_011
+Ns 323.721741
+Ka 0.560345 0.560345 0.560345
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 4.900000
+d 0.663793
+illum 6
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/fire extinguisher.jpg
+
+newmtl Metal_iron
+Ns 810.000000
+Ka 0.940909 0.940909 0.940909
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Polished_iron
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/iron_BaseColor.jpg
+map_Bump -bm 1.000000 /Users/seanmh/Downloads/Subway_3D/textures/clean chrome_Normal.jpg
+
+newmtl Scratched_Iron
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/scratched_iron_12012024_basecolor.jpg
+map_Bump -bm 1.000000 /Users/seanmh/Downloads/Subway_3D/textures/scratched_iron_12012024_normal.jpg
+
+newmtl VANS_WEB_BANNER
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/VANS-WEB-BANNER.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/VANS-WEB-BANNER.jpg
+
+newmtl WCCFunrealengine59
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/WCCFunrealengine59.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/WCCFunrealengine59.jpg
+
+newmtl _60_F_447799537_UwhVEIKtuaAfo4RY2aGLrCQ6zie37GYh
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/360_F_447799537_UwhVEIKtuaAfo4RY2aGLrCQ6zie37GYh.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/360_F_447799537_UwhVEIKtuaAfo4RY2aGLrCQ6zie37GYh.jpg
+
+newmtl banner
+Ns 54.176582
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/banner.png
+map_d /Users/seanmh/Downloads/Subway_3D/textures/banner.png
+
+newmtl blackfriday_design
+Ns 250.000000
+Ka 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/blackfriday design.png
+map_d /Users/seanmh/Downloads/Subway_3D/textures/blackfriday design.png
+
+newmtl danger_banners
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/danger banners.png
+map_d /Users/seanmh/Downloads/Subway_3D/textures/danger banners.png
+
+newmtl download__1_
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/download (1).png
+map_d /Users/seanmh/Downloads/Subway_3D/textures/download (1).png
+
+newmtl emergensy
+Ns 241.453644
+Ka 0.991379 0.991379 0.991379
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/emergensy.png
+map_d /Users/seanmh/Downloads/Subway_3D/textures/emergensy.png
+
+newmtl holidaydale
+Ns 2.675386
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/holidaydale.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/holidaydale.jpg
+
+newmtl images
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/images.jpeg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/images.jpeg
+
+newmtl item
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/item.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/item.jpg
+
+newmtl maxresdefault
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/maxresdefault.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/maxresdefault.jpg
+
+newmtl nature
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/nature.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/nature.jpg
+
+newmtl pexels_njeromin_19394170
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/pexels-njeromin-19394170.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/pexels-njeromin-19394170.jpg
+
+newmtl pngwing_com__2_
+Ns 0.668848
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/pngwing.com (2).png
+map_d /Users/seanmh/Downloads/Subway_3D/textures/pngwing.com (2).png
+
+newmtl sipaling
+Ns 171.224716
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/sipaling.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/sipaling.jpg
+
+newmtl sneakers_facebook_cover_template_design_23_2151798473
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/sneakers-facebook-cover-template-design_23-2151798473.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/sneakers-facebook-cover-template-design_23-2151798473.jpg
+
+newmtl social_media_marketing_web_banner_digital_marketing_cover_banne
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl ue
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/ue.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/ue.jpg
+
+newmtl unity
+Ns 250.000000
+Ka 0.465517 0.465517 0.465517
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/unity.png
+map_d /Users/seanmh/Downloads/Subway_3D/textures/unity.png
+
+newmtl untitled1
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/untitled1.png
+map_d /Users/seanmh/Downloads/Subway_3D/textures/untitled1.png
+
+newmtl vektor_kota_bandung
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/vektor-kota-bandung.png
+map_d /Users/seanmh/Downloads/Subway_3D/textures/vektor-kota-bandung.png
+
+newmtl yellow
+Ns 250.000000
+Ka 0.672414 0.672414 0.672414
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /Users/seanmh/Downloads/Subway_3D/textures/yellow.jpg
+map_d /Users/seanmh/Downloads/Subway_3D/textures/yellow.jpg
