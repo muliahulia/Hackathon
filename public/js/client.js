@@ -5,7 +5,7 @@ import Stats from '../jsm/libs/stats.module.js';
 import { GUI } from '../jsm/libs/lil-gui.module.min.js';
 import { HomeScreen } from './homeScreen.js';
 
-// Scene
+// Scene setup
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xaaaaaa);
 
@@ -15,6 +15,7 @@ camera.position.set(0, 1.8, 5);
 const listener = new THREE.AudioListener();
 camera.add(listener);
 
+// Background Music setup
 const backaudio = new THREE.AudioLoader();
 const backgroundSound = new THREE.Audio(listener);
 backaudio.load('Music/background.mp3', (buffer) => {
@@ -30,6 +31,7 @@ backaudio.load('Music/background.mp3', (buffer) => {
     });
 });
 
+// Footstep Sound setup
 const audioLoader = new THREE.AudioLoader();
 const footstepSound = new THREE.Audio(listener);
 audioLoader.load('Music/foot.mp3', (buffer) => {
@@ -49,6 +51,7 @@ audioLoader.load('Music/foot.mp3', (buffer) => {
     });
 });
 
+// Renderer setup
 const renderer = new THREE.WebGLRenderer({ 
     antialias: true,
     powerPreference: "high-performance",
@@ -60,8 +63,10 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
+// HomeScreen Initialization
 const homeScreen = new HomeScreen(scene, camera, renderer);
 
+// Pointer Lock Controls
 const controls = new PointerLockControls(camera, document.body);
 document.addEventListener('click', () => {
     if (!homeScreen.isActive) {
@@ -80,6 +85,7 @@ controls.addEventListener('unlock', () => {
     homeScreen.show();
 });
 
+// Lighting Setup
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
 scene.add(ambientLight);
 
@@ -88,6 +94,7 @@ directionalLight.position.set(5, 10, 5);
 directionalLight.castShadow = true;
 scene.add(directionalLight);
 
+// Texture Loading
 const textureLoader = new THREE.TextureLoader();
 function loadTexture(url) {
     const texture = textureLoader.load(url);
@@ -97,6 +104,7 @@ function loadTexture(url) {
     return texture;
 }
 
+// Museum Model Setup
 const museumMaterial = new THREE.MeshStandardMaterial({
     map: loadTexture('/textures/Art room01_Art_Room1_BaseColor.png'),
     roughnessMap: loadTexture('/textures/Art room01_Art_Room1_Roughness.png'),
@@ -127,6 +135,7 @@ objLoader.load(
     }
 );
 
+// Player Movement
 const playerSpeed = 4;
 const move = { forward: 0, right: 0 };
 let prevTime = performance.now();
@@ -150,11 +159,59 @@ document.addEventListener('keyup', (event) => {
     }
 });
 
+// Window Resize
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+// Chatbot Integration
+document.getElementById("close-chat").addEventListener("click", () => {
+    document.getElementById("chatbot-container").style.display = "none";
+});
+
+document.getElementById("chatbot-send").addEventListener("click", async () => {
+    const inputField = document.getElementById("chatbot-input");
+    const userPrompt = inputField.value.trim();
+    
+    if (userPrompt) {
+        appendMessage("user", userPrompt);
+        inputField.value = ""; 
+
+        // Get AI-generated image
+        const imageUrl = await generateAIImage(userPrompt);
+        
+        if (imageUrl) {
+            const imgElement = document.getElementById("generated-image");
+            imgElement.src = imageUrl;
+            imgElement.style.display = "block";
+            appendMessage("ai", "Here is your generated image:");
+        } else {
+            appendMessage("ai", "Failed to generate image.");
+        }
+    }
+});
+
+export async function generateAIImage(prompt) {
+    try {
+        const response = await fetch("http://localhost:3000/generate-image", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ prompt }),  
+        });
+
+        if (!response.ok) throw new Error("Failed to generate image");
+
+        const data = await response.json();
+        return data.imageUrl;
+    } catch (error) {
+        console.error("Error generating image:", error);
+        return null;
+    }
+}
 
 const stats = Stats();
 document.body.appendChild(stats.dom);
@@ -189,48 +246,4 @@ function animate() {
 }
 
 animate();
-
-
-
-
-// document.getElementById("close-chat").addEventListener("click", () => {
-    //     document.getElementById("chatbot-container").style.display = "none";
-    // });
-    
-    // document.getElementById("chatbot-send").addEventListener("click", async () => {
-    //     const inputField = document.getElementById("chatbot-input");
-    //     const userPrompt = inputField.value.trim();
-        
-    //     if (userPrompt) {
-    //         appendMessage("user", userPrompt);
-    //         inputField.value = ""; 
-    
-    //         // Get AI-generated image
-    //         const imageUrl = await generateAIImage(userPrompt);
-            
-    //         if (imageUrl) {
-    //             const imgElement = document.getElementById("generated-image");
-    //             imgElement.src = imageUrl;
-    //             imgElement.style.display = "block";
-    //             appendMessage("ai", "Here is your generated image:");
-    //         } else {
-    //             appendMessage("ai", "Failed to generate image.");
-    //         }
-    //     }
-    // });
-    
-    // async function generateAIImage(prompt) {
-    //     try {
-    //         const response = await fetch("/generate-image", {
-    //             method: "POST",
-    //             headers: { "Content-Type": "application/json" },
-    //             body: JSON.stringify({ prompt }),
-    //         });
-    //         const data = await response.json();
-    //         return data.imageUrl;
-    //     } catch (error) {
-    //         console.error("Error generating image:", error);
-    //         return null;
-    //     }
-    // }
-    
+43
