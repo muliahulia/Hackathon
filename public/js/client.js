@@ -246,4 +246,3 @@ function animate() {
 }
 
 animate();
-43
