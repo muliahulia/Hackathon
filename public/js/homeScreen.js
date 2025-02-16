@@ -75,12 +75,14 @@ export class HomeScreen {
         const joinButton = this.createButton('Join Museum');
         // close homescreen 
         joinButton.addEventListener('click', () => {
-            window.dispatchEvent(new CustomEvent('joinMuseum')); // Trigger joinMuseum event
+            this.hide();
+            window.dispatchEvent(new Event('joinMuseum')); // Fire event to enable movement
         });
 
+        
         const addArtButton = this.createButton('Add Art');
 
-        addArtButton.addEventListener('click-add', () => {
+        addArtButton.addEventListener('click', () => {
             // Hide the primary button container
             buttonContainer.style.display = 'none';
             title.style.display = 'none';
@@ -159,6 +161,7 @@ export class HomeScreen {
   
         return button;
     }
+    
   
     show() {
         this.isActive = true;
@@ -169,13 +172,14 @@ export class HomeScreen {
     }
   
     hide() {
-        this.isActive = false;
+        this.isActive = false;  
         this.container.style.opacity = '0';
-        // Remove blur from renderer
         this.renderer.domElement.style.filter = 'none';
         this.renderer.domElement.style.transform = 'none';
-          
-        this.container.remove();
+    
+        setTimeout(() => {
+            this.container.remove();
+        }, 500);
     }
 }
     

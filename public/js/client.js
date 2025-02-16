@@ -7,26 +7,29 @@ import { HomeScreen } from './homeScreen.js';
 
 // Scene
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xaaaaaa); // light gray background
+scene.background = new THREE.Color(0xaaaaaa);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-camera.position.set(0, 1.8, 5); // Adjusted for first-person height
+camera.position.set(0, 1.8, 5);
 
-// Add an audio listener for the camera
 const listener = new THREE.AudioListener();
 camera.add(listener);
 
-// Background audio setup (plays continuously)
 const backaudio = new THREE.AudioLoader();
 const backgroundSound = new THREE.Audio(listener);
 backaudio.load('Music/background.mp3', (buffer) => {
     backgroundSound.setBuffer(buffer);
     backgroundSound.setLoop(true);
     backgroundSound.setVolume(0.1);
-    backgroundSound.play();  // Starts playing immediately after loading
+    document.addEventListener('click', () => {
+        if (backgroundSound.isPlaying) {
+            backgroundSound.pause();
+        } else {
+            backgroundSound.play();
+        }
+    });
 });
 
-// Load the footstep sound
 const audioLoader = new THREE.AudioLoader();
 const footstepSound = new THREE.Audio(listener);
 audioLoader.load('Music/foot.mp3', (buffer) => {
@@ -46,9 +49,6 @@ renderer.shadowMap.enabled = true; // Enable real-time shadows
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Higher quality shadows
 document.body.appendChild(renderer.domElement);
 
-// Home Screen UI
-const homeScreen = new HomeScreen(scene, camera, renderer);
-
 // PointerLockControls for first-person camera movement
 const controls = new PointerLockControls(camera, document.body);
 document.addEventListener('click', () => {
@@ -63,19 +63,64 @@ controls.enableDamping = true;
 controls.enabled = false;
 
 // Lighting setup
+footstepSound.setVolume(0.5);
+document.addEventListener('keydown', (event) => {
+    if (['KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(event.code)) {
+        if (!footstepSound.isPlaying) {
+            footstepSound.play();
+        }
+    }
+});
+document.addEventListener('keyup', (event) => {
+    if (['KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(event.code)) {
+        footstepSound.stop();
+    }
+});
+
+
+const renderer = new THREE.WebGLRenderer({ 
+    antialias: true,
+    powerPreference: "high-performance",
+    logarithmicDepthBuffer: true
+});
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const homeScreen = new HomeScreen(scene, camera, renderer);
+
+const controls = new PointerLockControls(camera, document.body);
+document.addEventListener('click', () => {
+    if (!homeScreen.isActive) {
+        controls.lock();
+    }
+});
+
+controls.addEventListener('lock', () => {
+    console.log("Controls locked! Movement enabled.");
+    controls.enabled = true;
+});
+
+controls.addEventListener('unlock', () => {
+    console.log("Controls unlocked! Movement disabled.");
+    controls.enabled = false;
+    homeScreen.show();
+});
+
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
 directionalLight.position.set(5, 10, 5);
-directionalLight.castShadow = true; // Enable shadows
+directionalLight.castShadow = true;
 scene.add(directionalLight);
 
-// Texture Loader and PBR materials
 const textureLoader = new THREE.TextureLoader();
 function loadTexture(url) {
     const texture = textureLoader.load(url);
-    texture.anisotropy = renderer.capabilities.getMaxAnisotropy(); // Sharpen textures
+    texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
     texture.magFilter = THREE.LinearFilter;
     texture.minFilter = THREE.LinearMipmapLinearFilter;
     return texture;
@@ -102,7 +147,6 @@ const museumMaterial = new THREE.MeshStandardMaterial({
     emissive: new THREE.Color(0xffffff),
 });
 
-// Load Museum Model
 const objLoader = new OBJLoader();
 objLoader.load(
     './models/museum.obj',
@@ -118,18 +162,14 @@ objLoader.load(
         museum.position.set(0, 0, 0);
         scene.add(museum);
         animate();
-    },
-    (xhr) => console.log(`Museum OBJ: ${((xhr.loaded / xhr.total) * 100).toFixed(2)}% loaded`),
-    (error) => console.error('Error loading museum model:', error)
+    }
 );
 
-// Player Movement Variables
 const playerSpeed = 4;
 const move = { forward: 0, right: 0 };
 let prevTime = performance.now();
-let isMoving = false; // Track movement status
+let isMoving = false;
 
-// Movement Listeners
 document.addEventListener('keydown', (event) => {
     switch (event.code) {
         case 'KeyW': move.forward = 1; break;
@@ -153,14 +193,11 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    render();
 });
 
-// Stats Monitor
 const stats = Stats();
 document.body.appendChild(stats.dom);
 
-// GUI Controls for Camera
 const gui = new GUI();
 const cameraFolder = gui.addFolder('Camera');
 cameraFolder.add(camera.position, 'z', 0, 10);
@@ -176,59 +213,70 @@ function render() {
 function animate() {
     requestAnimationFrame(animate);
 
-    // Only update controls if the home screen is not active
     if (!homeScreen.isActive && controls.enabled) {
-        controls.update();
-
         const time = performance.now();
         const deltaTime = (time - prevTime) / 1000;
         prevTime = time;
 
-        if (move.forward !== 0 || move.right !== 0) {
-            if (!isMoving) {
-                footstepSound.play(); // Play footstep sound when the player starts moving
-                isMoving = true;
-            }
-        } else {
-            if (isMoving) {
-                footstepSound.stop(); // Stop footstep sound when the player stops
-                isMoving = false;
-            }
-        }
-
-        // Move player in the direction they're facing
         const direction = new THREE.Vector3();
         camera.getWorldDirection(direction);
-        direction.y = 0; // Keep movement along the horizontal plane
+        direction.y = 0;
         direction.normalize();
 
         const right = new THREE.Vector3();
-        right.crossVectors(camera.up, direction).normalize();
+        right.crossVectors(new THREE.Vector3(0, 1, 0), direction).normalize();
 
         camera.position.addScaledVector(direction, move.forward * playerSpeed * deltaTime);
         camera.position.addScaledVector(right, move.right * playerSpeed * deltaTime);
-        
-        renderer.render(scene, camera);
-        stats.update();
-    } 
-    else {
-        renderer.render(scene, camera);
-        stats.update();
     }
+
+    renderer.render(scene, camera);
+    stats.update();
 }
-// HomeScreen Event Handling
-window.addEventListener('joinMuseum', () => {
-    homeScreen.hide();
-    controls.enabled = true;
-    controls.lock();
-});
 
-controls.addEventListener('unlock', () => {
-    if (!homeScreen.isActive) {
-        controls.enabled = false;
-        homeScreen.show();
-    }
-});
-
-// Start the animation loop
 animate();
+
+
+
+
+// document.getElementById("close-chat").addEventListener("click", () => {
+    //     document.getElementById("chatbot-container").style.display = "none";
+    // });
+    
+    // document.getElementById("chatbot-send").addEventListener("click", async () => {
+    //     const inputField = document.getElementById("chatbot-input");
+    //     const userPrompt = inputField.value.trim();
+        
+    //     if (userPrompt) {
+    //         appendMessage("user", userPrompt);
+    //         inputField.value = ""; 
+    
+    //         // Get AI-generated image
+    //         const imageUrl = await generateAIImage(userPrompt);
+            
+    //         if (imageUrl) {
+    //             const imgElement = document.getElementById("generated-image");
+    //             imgElement.src = imageUrl;
+    //             imgElement.style.display = "block";
+    //             appendMessage("ai", "Here is your generated image:");
+    //         } else {
+    //             appendMessage("ai", "Failed to generate image.");
+    //         }
+    //     }
+    // });
+    
+    // async function generateAIImage(prompt) {
+    //     try {
+    //         const response = await fetch("/generate-image", {
+    //             method: "POST",
+    //             headers: { "Content-Type": "application/json" },
+    //             body: JSON.stringify({ prompt }),
+    //         });
+    //         const data = await response.json();
+    //         return data.imageUrl;
+    //     } catch (error) {
+    //         console.error("Error generating image:", error);
+    //         return null;
+    //     }
+    // }
+    
